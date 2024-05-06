@@ -1,0 +1,23 @@
+services:
+    backend:
+        image: taufikharahap/coffeeshop:1
+        ports:
+            - '8089:8081'
+        environment:
+            - DB_HOST=some-postgres
+        networks:
+            - coffeenet
+    
+    postgres:
+        image: postgres:16.1-alpine3.18
+        ports:
+            - '5433:5432'
+        environment:
+            - POSTGRES_PASSWORD=postgres
+        networks:
+            - coffeenet
+
+networks:
+    coffeenet:
+          name: 'devnet'
+          external: true

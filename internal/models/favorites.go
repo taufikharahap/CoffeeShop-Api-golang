@@ -18,6 +18,8 @@ type FavoriteUser struct {
 	Category    string  `db:"category" form:"category" json:"category"`
 	Price       int     `db:"price" form:"price" json:"price"`
 	Discount    float64 `db:"discount" form:"discount" json:"discount"`
-	Image       string  `db:"image" form:"image" json:"image"`
-	Description string  `db:"description" form:"description" json:"description"`
+	Image_url   string  `db:"image_url" form:"image_url" json:"image_url"`
+	Description *string `db:"description" form:"description" json:"description"`
 }
+
+type FavoriteUsers []FavoriteUser

@@ -15,6 +15,7 @@ func favorites(g *gin.Engine, d *sqlx.DB) {
 	handler := handlers.NewFavorite(repo)
 
 	route.GET("/:user_id", handler.GetFavoritesByUserId)
+	route.GET("/query/:user_id", handler.GetFavoriteUserBy)
 	route.POST("/", handler.PostFavorite)
 	route.PUT("/:favorite_id", handler.UpdateFavorite)
 	route.DELETE("/:favorite_id", handler.DeleteFavorite)

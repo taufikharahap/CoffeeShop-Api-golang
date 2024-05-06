@@ -3,11 +3,11 @@ create table public.products (
     name varchar not null,
     category varchar not null,
     price int not null,
-	discount numeric(3,2) null,
-    image text null,
+	discount numeric(3,2) not null default 0,
+    image_url text not null default '',
 	description text null,
-    created_at timestamp default now(),
-    update_at timestamp null,
+    created_at timestamp without time zone not null default now(),
+    updated_at timestamp without time zone null,
     constraint products_pk primary key (product_id)
 );
 

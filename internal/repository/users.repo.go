@@ -1,7 +1,9 @@
 package repository
 
 import (
+	"coffeeshop-api-golang/config"
 	"coffeeshop-api-golang/internal/models"
+	"errors"
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
@@ -56,27 +58,55 @@ func (r *RepoUsers) GetByEmail(data *models.User) (interface{}, error) {
 
 }
 
-func (r *RepoUsers) CreateUser(data *models.User) (string, error) {
+func (r *RepoUsers) GetAllUser() (*config.Result, error) {
+	var data models.Users
+	q := `SELECT email, "role", created_at, updated_at FROM users ORDER BY created_at DESC`
+
+	if err := r.Select(&data, q); err != nil {
+		return nil, err
+	}
+
+	return &config.Result{Data: data}, nil
+}
+
+func (r *RepoUsers) GetAuthData(email string) (*models.User, error) {
+	var result models.User
+	q := `SELECT user_id, email, role, password FROM public.users WHERE email = ?`
+
+	if err := r.Get(&result, r.Rebind(q), email); err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			return nil, errors.New("email not found")
+		}
+
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+func (r *RepoUsers) CreateUser(data *models.User) (*config.Result, error) {
 	q := `INSERT INTO public.users(
 		email,
 		phone,
-		password)
+		password,
+		role)
 	VALUES(
 		:email,
 		:phone,
-		:password
+		:password,
+		:role
 	)`
 
 	_, err := r.NamedExec(q, data)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return "1 data user created", nil
+	return &config.Result{}, nil
 
 }
 
-func (r *RepoUsers) Update(data *models.User, user_id string) (string, error) {
+func (r *RepoUsers) Update(data *models.User, user_id string) (*config.Result, error) {
 	q := `UPDATE users SET
 			first_name = $1,
 			last_name = $2,
@@ -91,21 +121,21 @@ func (r *RepoUsers) Update(data *models.User, user_id string) (string, error) {
 
 	_, err := r.Exec(q, data.First_name, data.Last_name, data.Email, data.Phone, data.Password, data.Birth, data.Gender, data.Image, user_id)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return "1 data user updated", nil
+	return &config.Result{}, nil
 
 }
 
-func (r *RepoUsers) Delete(data *models.User) (string, error) {
+func (r *RepoUsers) Delete(data *models.User) (*config.Result, error) {
 	q := `delete from users where user_id::text = $1`
 
 	_, err := r.Exec(q, data.User_id)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return "1 data user deleted", nil
+	return &config.Result{}, nil
 
 }

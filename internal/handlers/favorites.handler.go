@@ -1,9 +1,13 @@
 package handlers
 
 import (
+	"coffeeshop-api-golang/config"
 	"coffeeshop-api-golang/internal/models"
 	"coffeeshop-api-golang/internal/repository"
+	"coffeeshop-api-golang/pkg"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,6 +47,36 @@ func (h *HandlerFavorites) GetFavoritesByUserId(ctx *gin.Context) {
 
 	ctx.JSON(200, gin.H{"data": result})
 
+}
+
+func (h *HandlerFavorites) GetFavoriteUserBy(ctx *gin.Context) {
+	id := ctx.Param("user_id")
+	name := ctx.Query("name")
+	page := ctx.DefaultQuery("page", "1")
+	limit := ctx.DefaultQuery("limit", "10")
+
+	fmt.Println(id)
+
+	user_id := fmt.Sprintf(`'%s'`, id)
+
+	pg, _ := strconv.Atoi(page)
+	lm, _ := strconv.Atoi(limit)
+
+	data, err := h.GetUserIdBy(models.Meta{
+		Name:  name,
+		Page:  pg,
+		Limit: lm,
+	}, user_id)
+
+	if err != nil {
+		pkg.NewRes(http.StatusBadRequest, &config.Result{
+			Data: err.Error(),
+		}).Send(ctx)
+		fmt.Println(err)
+		return
+	}
+
+	pkg.NewRes(200, data).Send(ctx)
 }
 
 func (h *HandlerFavorites) PostFavorite(ctx *gin.Context) {

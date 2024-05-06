@@ -1,11 +1,14 @@
 package handlers
 
 import (
+	"coffeeshop-api-golang/config"
 	"coffeeshop-api-golang/internal/models"
 	"coffeeshop-api-golang/internal/repository"
+	"coffeeshop-api-golang/pkg"
 	"fmt"
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 )
 
@@ -37,20 +40,41 @@ func (h *HandlerUsers) GetUserByEmail(ctx *gin.Context) {
 }
 
 func (h *HandlerUsers) PostUser(ctx *gin.Context) {
-	var user models.User
+	var err error
+	data := models.User{
+		Role: "user",
+	}
 
-	if err := ctx.ShouldBind(&user); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := ctx.ShouldBind(&data); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	result, err := h.CreateUser(&user)
+	_, err = govalidator.ValidateStruct(&data)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		pkg.NewRes(401, &config.Result{
+			Data: err.Error(),
+		}).Send(ctx)
 		return
 	}
 
-	ctx.JSON(200, result)
+	data.Password, err = pkg.HashPassword(data.Password)
+	if err != nil {
+		pkg.NewRes(401, &config.Result{
+			Data: err.Error(),
+		}).Send(ctx)
+		return
+	}
+
+	result, err := h.CreateUser(&data)
+	if err != nil {
+		pkg.NewRes(401, &config.Result{
+			Data: err.Error(),
+		}).Send(ctx)
+		return
+	}
+
+	pkg.NewRes(200, result).Send(ctx)
 }
 
 func (h *HandlerUsers) UpdateUser(ctx *gin.Context) {
