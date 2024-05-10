@@ -14,7 +14,3 @@ create table public.favorites (
         REFERENCES products(product_id)
         ON DELETE CASCADE
 );
-
-insert into public.favorites (user_id, product_id)
-	values 
-		('cfb54516-12e4-4041-96c4-f00d77982e64','c6b47ace-c6b3-476d-b421-101bda854c03');

@@ -85,6 +85,8 @@ func reqBody(ctx *gin.Context) {
 	ctx.JSON(200, data)
 }
 
+var test string = "hello"
+
 /*
 UPDATE users SET
 			first_name = COALESCE(NULLIF(:first_name, ''), first_name),

@@ -1,9 +1,11 @@
-APP=goback
+APP=coffee-shop
 BUILD="./build/$(APP)"
 DB_DRIVER=postgres
-DB_SOURCE="postgresql://golang:abcd1234@localhost/webgo?sslmode=disable&search_path=tiketz"
+DB_SOURCE="postgresql://golang:golang@localhost/coffee_db?sslmode=disable&search_path=public"
 MIGRATIONS_DIR=./migrations
+
 # https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
+# migrate create -ext sql -dir migrations/ -seq users > create file migrat berdasarkan nama tabel
 
 
 install:

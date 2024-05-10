@@ -1,4 +1,4 @@
-CREATE TABLE users (
+CREATE TABLE public.users (
     user_id uuid DEFAULT gen_random_uuid(),
     first_name VARCHAR NULL,
     last_name VARCHAR NULL,
@@ -13,8 +13,3 @@ CREATE TABLE users (
 	updated_at TIMESTAMP without time zone null,
 	CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
-
-INSERT INTO public.users (email, phone, password)
-    values 
-        ('user1@email.com', '08123456789', 'user1'),
-        ('user2@email.com', '08123456780', 'user2');

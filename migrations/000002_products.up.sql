@@ -10,13 +10,3 @@ create table public.products (
     updated_at timestamp without time zone null,
     constraint products_pk primary key (product_id)
 );
-
-insert into public.products (name, category, price)
-	values 
-		('sanger coffee', 'coffee', 30000),
-		('nasi goreng', 'foods', 25000),
-		('teh susu', 'noncoffee', 10000);
-
-insert into public.products (name, category, price, discount)
-	values 
-		('kopi susu', 'coffee', 30000, 0.10);
