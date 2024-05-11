@@ -1,6 +1,7 @@
 services:
     postgres:
-        image: postgres:16.1-alpine3.18
+        container_name: postgres
+        image: postgres
         ports:
             - '5433:5432'
         environment:
@@ -11,11 +12,11 @@ services:
             - coffeenet
 
     backend:
-        image: taufikharahap/coffeeshop:2
+        image: taufikharahap/coffeeshop:3
         ports:
             - '8089:8081'
         environment:
-            - DB_HOST=some-postgres
+            - DB_HOST=postgres
         networks:
             - coffeenet
 

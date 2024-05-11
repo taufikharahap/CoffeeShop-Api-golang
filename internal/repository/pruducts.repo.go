@@ -11,6 +11,13 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type RepoProductsIF interface {
+	GetProd(data *models.Product, page int, limit int) ([]models.Product, error)
+	GetProdBy(params models.Meta) (*config.Result, error)
+	CreateProd(data *models.Product) (*config.Result, error)
+	UpdateProd(data *models.Product, product_id string) (*config.Result, error)
+	DeleteProd(data *models.Product) (*config.Result, error)
+}
 type RepoProducts struct {
 	*sqlx.DB
 }

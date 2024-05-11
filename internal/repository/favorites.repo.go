@@ -10,6 +10,13 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type RepoFavoritesIF interface {
+	GetByUserId(data *models.Favorite, page int, limit int) ([]models.FavoriteUser, error)
+	GetUserIdBy(params models.Meta, userId string) (*config.Result, error)
+	CreateFavorite(data *models.Favorite) (string, error)
+	UpdateFav(data *models.Favorite, favorite_id string) (string, error)
+	DeleteFav(data *models.Favorite) (string, error)
+}
 type RepoFavorites struct {
 	*sqlx.DB
 }

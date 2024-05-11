@@ -13,10 +13,10 @@ import (
 )
 
 type HandlerUsers struct {
-	*repository.RepoUsers
+	repository.RepoUsersIF
 }
 
-func NewUser(r *repository.RepoUsers) *HandlerUsers {
+func NewUser(r repository.RepoUsersIF) *HandlerUsers {
 	return &HandlerUsers{r}
 }
 

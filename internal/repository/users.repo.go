@@ -9,6 +9,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type RepoUsersIF interface {
+	GetByEmail(data *models.User) (interface{}, error)
+	GetAllUser() (*config.Result, error)
+	GetAuthData(email string) (*models.User, error)
+	CreateUser(data *models.User) (*config.Result, error)
+	Update(data *models.User, user_id string) (*config.Result, error)
+	Delete(data *models.User) (*config.Result, error)
+}
+
 type RepoUsers struct {
 	*sqlx.DB
 }
@@ -16,29 +25,6 @@ type RepoUsers struct {
 func NewUser(db *sqlx.DB) *RepoUsers {
 	return &RepoUsers{db}
 }
-
-// func rowToStruct(rows *sqlx.Rows, dest interface{}) error {
-// 	destv := reflect.ValueOf(dest).Elem()
-
-// 	args := make([]interface{}, destv.Type().Elem().NumField())
-
-// 	for rows.Next() {
-// 		rowp := reflect.New(destv.Type().Elem())
-// 		rowv := rowp.Elem()
-
-// 		for i := 0; i < rowv.NumField(); i++ {
-// 			args[i] = rowv.Field(i).Addr().Interface()
-// 		}
-
-// 		if err := rows.Scan(args...); err != nil {
-// 			return err
-// 		}
-
-// 		destv.Set(reflect.Append(destv, rowv))
-// 	}
-
-// 	return nil
-// }
 
 func (r *RepoUsers) GetByEmail(data *models.User) (interface{}, error) {
 	q := `select user_id, password from users where email = $1`

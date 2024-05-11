@@ -13,10 +13,10 @@ import (
 )
 
 type HandlerFavorites struct {
-	*repository.RepoFavorites
+	repository.RepoFavoritesIF
 }
 
-func NewFavorite(r *repository.RepoFavorites) *HandlerFavorites {
+func NewFavorite(r repository.RepoFavoritesIF) *HandlerFavorites {
 	return &HandlerFavorites{r}
 }
 

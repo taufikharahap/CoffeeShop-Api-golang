@@ -12,10 +12,10 @@ import (
 )
 
 type HandlerProducts struct {
-	*repository.RepoProducts
+	repository.RepoProductsIF
 }
 
-func NewPruduct(r *repository.RepoProducts) *HandlerProducts {
+func NewPruduct(r repository.RepoProductsIF) *HandlerProducts {
 	return &HandlerProducts{r}
 }
 
