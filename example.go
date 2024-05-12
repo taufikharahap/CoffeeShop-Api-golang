@@ -1,10 +1,19 @@
 package main
 
 import (
+	"errors"
 	"log"
 
 	"github.com/gin-gonic/gin"
 )
+
+func SayHello(name string, err bool) (string, error) {
+	if err {
+		return "", errors.New("something wrong")
+	}
+
+	return "hello " + name, nil
+}
 
 func example() {
 	router := gin.Default()
@@ -84,19 +93,3 @@ func reqBody(ctx *gin.Context) {
 
 	ctx.JSON(200, data)
 }
-
-var test string = "hello"
-
-/*
-UPDATE users SET
-			first_name = COALESCE(NULLIF(:first_name, ''), first_name),
-			last_name = COALESCE(NULLIF(:last_name, ''), last_name),
-			email = COALESCE(NULLIF(:email, ''), email),
-			phone = COALESCE(NULLIF(:phone, ''), phone),
-			password = COALESCE(NULLIF(:password, ''), password),
-			birth = COALESCE(NULLIF(:password, ''), password),
-			gender = COALESCE(NULLIF(:gender, ''), gender),
-			image = COALESCE(NULLIF(:image, ''), image),
-			updated_at = now()
-			WHERE user_id::text = :user_id
-*/

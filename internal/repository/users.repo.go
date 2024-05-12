@@ -4,13 +4,12 @@ import (
 	"coffeeshop-api-golang/config"
 	"coffeeshop-api-golang/internal/models"
 	"errors"
-	"fmt"
 
 	"github.com/jmoiron/sqlx"
 )
 
 type RepoUsersIF interface {
-	GetByEmail(data *models.User) (interface{}, error)
+	GetByEmail(email string) (*config.Result, error)
 	GetAllUser() (*config.Result, error)
 	GetAuthData(email string) (*models.User, error)
 	CreateUser(data *models.User) (*config.Result, error)
@@ -26,21 +25,25 @@ func NewUser(db *sqlx.DB) *RepoUsers {
 	return &RepoUsers{db}
 }
 
-func (r *RepoUsers) GetByEmail(data *models.User) (interface{}, error) {
-	q := `select user_id, password from users where email = $1`
+func (r *RepoUsers) GetByEmail(email string) (*config.Result, error) {
+	q := `select * from users where email = $1`
 
-	var user = struct {
-		User_id  string `json:"user_id" db:"user_id"`
-		Password string `json:"password" db:"password"`
-	}{}
+	// var user = struct {
+	// 	User_id  string `json:"user_id" db:"user_id"`
+	// 	Password string `json:"password" db:"password"`
+	// }{}
 
-	err := r.Get(&user, q, data.Email)
+	var user models.User
+
+	err := r.Get(&user, r.Rebind(q), email)
 	if err != nil {
-		fmt.Println(err)
-		return user, err
+		if err.Error() == "sql: no rows in result set" {
+			return nil, errors.New("email not found")
+		}
+		return nil, err
 	}
 
-	return user, nil
+	return &config.Result{Data: user}, nil
 
 }
 
@@ -88,7 +91,7 @@ func (r *RepoUsers) CreateUser(data *models.User) (*config.Result, error) {
 		return nil, err
 	}
 
-	return &config.Result{}, nil
+	return &config.Result{Message: "1 data user created"}, nil
 
 }
 

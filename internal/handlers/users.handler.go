@@ -27,15 +27,18 @@ func (h *HandlerUsers) GetUserByEmail(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	fmt.Println(user.Email)
 
-	fmt.Println(user)
-	result, err := h.GetByEmail(&user)
+	result, err := h.GetByEmail(user.Email)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		pkg.NewRes(http.StatusBadRequest, &config.Result{
+			Data: err.Error(),
+		}).Send(ctx)
 		return
 	}
 
-	ctx.JSON(200, result)
+	// ctx.JSON(200, result)
+	pkg.NewRes(200, result).Send(ctx)
 
 }
 
