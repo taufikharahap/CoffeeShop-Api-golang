@@ -7,7 +7,7 @@
 1. Clone the repository
 
 ```bash
-git clone https://github.com/taufikharahap/CoffeShop-Api-golang.git
+git clone https://github.com/taufikharahap/CoffeeShop-Api-golang.git
 ```
 
 2. Install dependencies
