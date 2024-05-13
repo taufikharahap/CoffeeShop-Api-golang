@@ -10,8 +10,6 @@ import (
 
 type RepoUsersIF interface {
 	GetByEmail(email string) (*config.Result, error)
-	GetAllUser() (*config.Result, error)
-	GetAuthData(email string) (*models.User, error)
 	CreateUser(data *models.User) (*config.Result, error)
 	Update(data *models.User, user_id string) (*config.Result, error)
 	Delete(data *models.User) (*config.Result, error)
@@ -113,7 +111,7 @@ func (r *RepoUsers) Update(data *models.User, user_id string) (*config.Result, e
 		return nil, err
 	}
 
-	return &config.Result{}, nil
+	return &config.Result{Message: "1 data user updated"}, nil
 
 }
 
@@ -125,6 +123,6 @@ func (r *RepoUsers) Delete(data *models.User) (*config.Result, error) {
 		return nil, err
 	}
 
-	return &config.Result{}, nil
+	return &config.Result{Message: "1 data user deleted"}, nil
 
 }

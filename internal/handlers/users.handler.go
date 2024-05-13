@@ -96,7 +96,8 @@ func (h *HandlerUsers) UpdateUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, result)
+	// ctx.JSON(200, result)
+	pkg.NewRes(200, result).Send(ctx)
 
 }
 func (h *HandlerUsers) DeleteUser(ctx *gin.Context) {
@@ -113,5 +114,6 @@ func (h *HandlerUsers) DeleteUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, result)
+	// ctx.JSON(200, result)
+	pkg.NewRes(200, result).Send(ctx)
 }
